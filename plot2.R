@@ -5,14 +5,13 @@ cnames <- readLines("household_power_consumption.txt", 1)
 cnames <- strsplit(cnames, ";", fixed = TRUE)
 names(df) <- make.names(cnames[[1]])
 df$Date <- strptime(df$Date,"%d/%m/%Y", tz="")
+df$datetime <- as.POSIXct(paste(df$Date, df$Time))
 
-
-## create hhistogram of global active power
-hist(df$Global_active_power, col="red", 
-     xlab="Global Active Power (kilowatts)",
-     main="Global Active Power")
+## create time series of global acive power
+with(df, plot(datetime, Global_active_power, type="l", 
+              xlab = "", ylab="Global Active Power (kilowatts)"))
 
 
 ## save figure
-dev.copy(png, file="plot1.png")
+dev.copy(png, file="plot2.png")
 dev.off()
